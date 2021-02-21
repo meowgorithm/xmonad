@@ -1,0 +1,5 @@
+.ghc.environment.*
+*.hi
+*.o
+*.errors
+xmonad-*
