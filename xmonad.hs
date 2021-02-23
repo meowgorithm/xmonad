@@ -71,10 +71,12 @@ myKeys conf@XConfig {XMonad.modMask = modMask} = Map.fromList
     -- Screenshots
     , ( (mod4Mask .|. shiftMask, xK_s)
         , spawnHere $
-            "fn=$HOME/screens/$(date +%m-%d-%Y-%H-%M.png);" ++
+            "dir=$HOME/screens;" ++
+            "mkdir -p $dir;" ++
+            "fn=$dir/$(date +%m-%d-%Y-%H-%M-%S.png);" ++
             "sel=$(slop -f \"-g %g\");" ++
             "shotgun $sel $fn;" ++
-            "gthumb $HOME/screens" )
+            "gthumb $dir" )
 
     -- Cycle through non-empty workspaces
     , ( (modMask, xK_bracketright), windows . StackSet.greedyView =<< CycleWS.findWorkspace getSortByIndexNoNSP Next CycleWS.HiddenNonEmptyWS 1 )
