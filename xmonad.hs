@@ -109,6 +109,7 @@ myManageHook =
         , className =? "Slack" --> (doFloat <+> doShift (getWS 2))
         , className =? "Gthumb" --> doSideFloat SE
         , className =? "Galculator" --> doSideFloat C
+        , className =? "Gcolor2" --> doSideFloat C
         ]
 
 
