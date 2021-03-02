@@ -48,11 +48,11 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} =
 
 myConfig :: XConfig (Choose Tall (Choose (Mirror Tall) Full))
 myConfig =
-    def { terminal = "kitty"
+    def { terminal = "kitty --single-instance"
         , modMask = mod4Mask
         , workspaces = myWorkspaces
-        , normalBorderColor = "#212121"
-        , focusedBorderColor = "#8888ff"
+        , normalBorderColor = "#262626"
+        , focusedBorderColor = "#44447f"
         , borderWidth = 4
         , manageHook = myManageHook
         , keys = \c -> myKeys c `Map.union` keys def c
