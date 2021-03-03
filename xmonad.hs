@@ -5,20 +5,29 @@ import Data.Maybe ( fromMaybe )
 import Data.Semigroup ( Endo )
 import System.IO ( IO )
 import XMonad
-    ( (-->), (.|.), (<+>), (=?), ButtonMask, Choose, Default(def), Full, KeyMask
-    , KeySym, Layout, Mirror, Query, Tall, WindowSet, X
+    ( (-->), (.|.), (<+>), (=?), (|||), ButtonMask, Choose, Default(def)
+    , KeyMask, KeySym, Layout, Mirror, Mirror(Mirror), Query, Tall, Tall(Tall)
+    , WindowSet, X
     , XConfig(XConfig, terminal, workspaces, normalBorderColor,
         focusedBorderColor, borderWidth, keys, modMask, manageHook), appName
-    , className, composeAll, controlMask, doFloat, doShift, mod4Mask, shiftMask
-    , spawn, windows, xK_b, xK_bracketleft, xK_bracketright, xK_p, xK_s, xK_z
-    , xmonad )
+    , className, composeAll, controlMask, doFloat, doShift, layoutHook, mod4Mask
+    , shiftMask, spawn, windows, xK_b, xK_bracketleft, xK_bracketright, xK_p
+    , xK_s, xK_z, xmonad )
 import qualified XMonad.Actions.CycleWS as CycleWS
 import XMonad.Actions.SpawnOn ( manageSpawn, spawnHere )
-import XMonad.Hooks.DynamicLog ( ppCurrent, ppHidden, ppOrder, ppSep, ppTitle
-                               , statusBar, xmobar, xmobarColor, xmobarPP, PP )
+import XMonad.Hooks.DynamicLog
+    ( PP, ppCurrent, ppHidden, ppOrder, ppSep, ppTitle, statusBar, xmobar
+    , xmobarColor, xmobarPP )
 import XMonad.Hooks.ManageDocks ( Direction1D(Next, Prev), manageDocks )
 import XMonad.Hooks.ManageHelpers
     ( Side(SW, SE, C), doFullFloat, doSideFloat, isFullscreen )
+import XMonad.Layout.LayoutModifier ( ModifiedLayout )
+import XMonad.Layout.MultiColumns ( MultiCol, multiCol )
+import XMonad.Layout.Named ( named )
+import XMonad.Layout.NoBorders ( SmartBorder, noBorders, smartBorders )
+import XMonad.Layout.Tabbed as Tabbed ( simpleTabbed )
+import XMonad.Layout.ThreeColumns ( ThreeCol(ThreeColMid) )
+import XMonad.Layout.ToggleLayouts ( toggleLayouts )
 import qualified XMonad.StackSet as StackSet
 import XMonad.Util.EZConfig ( additionalKeys )
 import XMonad.Util.NamedScratchpad ( namedScratchpadFilterOutWorkspace )
@@ -46,7 +55,6 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} =
     (modMask, xK_b)
 
 
-myConfig :: XConfig (Choose Tall (Choose (Mirror Tall) Full))
 myConfig =
     def { terminal = "kitty --single-instance"
         , modMask = mod4Mask
@@ -54,10 +62,10 @@ myConfig =
         , normalBorderColor = "#262626"
         , focusedBorderColor = "#44447f"
         , borderWidth = 4
+        , layoutHook = myLayoutHook
         , manageHook = myManageHook
         , keys = \c -> myKeys c `Map.union` keys def c
         }
-
 
 myWorkspaces :: [ String ]
 myWorkspaces =
@@ -113,12 +121,21 @@ myManageHook =
         ]
 
 
-{--| Get a workspace by its number. Note that we're using 1-based indexing
+
+myLayoutHook :: ModifiedLayout SmartBorder (Choose Tall MultiCol) a
+myLayoutHook =
+    smartBorders $
+        Tall 1 incr (7/10) ||| multiCol [1] 1 incr (-1/2)
+    where
+        incr = 1/10
+
+
+{-| Get a workspace by its number. Note that we're using 1-based indexing
      because that's generally how we're naming our workspaces. That is to say,
      the workspace at the 0 index of our list is called "1".
 
      If the index of the workspace doesn't exist we return the empty string.
---}
+-}
 getWS :: Int -> String
 getWS n
     | n < 1                        = ""
