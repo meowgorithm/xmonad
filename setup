@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rm -f "$HOME/.xmobarrc"
+ln -s "$HOME/.xmonad/xmobarrc" "$HOME/.xmobarrc"
+
+cabal install -z --lib --package-env=$HOME/.xmonad/ xmonad xmonad-contrib
