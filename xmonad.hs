@@ -114,7 +114,7 @@ myManageHook =
         , appName =? "Scratch" --> doSideFloat SW
         , appName =? "Msgcompose" --> doSideFloat SW
         , className =? "Float" --> doSideFloat SW
-        , className =? "Slack" --> (doFloat <+> doShift (getWS 2))
+        , className =? "Slack" --> (doFloat <+> doShift (getWS 1))
         , className =? "Gthumb" --> doSideFloat SE
         , className =? "Galculator" --> doSideFloat C
         , className =? "Gcolor2" --> doSideFloat C
@@ -131,8 +131,8 @@ myLayoutHook =
 
 
 {-| Get a workspace by its number. Note that we're using 1-based indexing
-     because that's generally how we're naming our workspaces. That is to say,
-     the workspace at the 0 index of our list is called "1".
+     because that's how we're naming our workspaces. That is to say, the
+     workspace at the 0 index of our list is called "1".
 
      If the index of the workspace doesn't exist we return the empty string.
 -}
