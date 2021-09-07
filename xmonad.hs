@@ -37,7 +37,7 @@ import XMonad.Util.WorkspaceCompare ( getSortByIndex )
 
 main :: IO ()
 main =
-    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
+    xmonad =<< statusBar "xmeowbar" myPP toggleStrutsKey myConfig
 
 
 myPP :: XMonad.Hooks.DynamicLog.PP
