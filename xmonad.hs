@@ -25,6 +25,7 @@ import XMonad.Layout.LayoutModifier ( ModifiedLayout )
 import XMonad.Layout.MultiColumns ( MultiCol, multiCol )
 import XMonad.Layout.Named ( named )
 import XMonad.Layout.NoBorders ( SmartBorder, noBorders, smartBorders )
+import XMonad.Layout.Spacing ( Border(Border), spacingRaw )
 import XMonad.Layout.Tabbed as Tabbed ( simpleTabbed )
 import XMonad.Layout.ThreeColumns ( ThreeCol(ThreeColMid) )
 import XMonad.Layout.ToggleLayouts ( toggleLayouts )
@@ -62,10 +63,14 @@ myConfig =
         , normalBorderColor = "#262626"
         , focusedBorderColor = "#44447f"
         , borderWidth = 4
-        , layoutHook = myLayoutHook
+        , layoutHook = spacing myLayoutHook
         , manageHook = myManageHook
         , keys = \c -> myKeys c `Map.union` keys def c
         }
+    where
+        border = Border 10 10 10 10
+        spacing = spacingRaw False border True border True
+
 
 myWorkspaces :: [ String ]
 myWorkspaces =
