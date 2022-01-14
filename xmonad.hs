@@ -79,9 +79,10 @@ myWorkspaces =
 
 myKeys :: (XConfig Layout -> Map.Map (ButtonMask, KeySym) (X ()))
 myKeys conf@XConfig {XMonad.modMask = modMask} = Map.fromList
+    -- Rofi (super + p)
     [ ((mod4Mask, xK_p), spawn "rofi -show run")
 
-    -- Screenshots
+    -- Screenshots (super + shift + s)
     , ( (mod4Mask .|. shiftMask, xK_s)
         , spawnHere $
             "dir=$HOME/screens;" ++
@@ -91,16 +92,18 @@ myKeys conf@XConfig {XMonad.modMask = modMask} = Map.fromList
             "shotgun $sel $fn;" ++
             "gthumb $dir" )
 
-    -- Cycle through non-empty workspaces
+    -- Cycle through non-empty workspaces (super + [])
     , ( (modMask, xK_bracketright), windows . StackSet.greedyView =<< CycleWS.findWorkspace getSortByIndexNoNSP Next CycleWS.HiddenNonEmptyWS 1 )
     , ( (modMask, xK_bracketleft), windows . StackSet.greedyView =<< CycleWS.findWorkspace getSortByIndexNoNSP Prev CycleWS.HiddenNonEmptyWS 1 )
 
-    -- Cycle through all workspaces
+    -- Cycle through all workspaces (super + ctrl + [])
     , ( (modMask .|. controlMask, xK_bracketright), CycleWS.nextWS )
     , ( (modMask .|. controlMask, xK_bracketleft), CycleWS.prevWS )
+
+    -- Jump to previous workspace (super + z)
     , ( (modMask, xK_z), CycleWS.toggleWS )
 
-    -- Move window to next/previous workspace
+    -- Move window to next/previous workspace (super + shift + [])
     , ( (modMask .|. shiftMask, xK_bracketright), CycleWS.shiftToNext >> CycleWS.nextWS )
     , ( (modMask .|. shiftMask, xK_bracketleft), CycleWS.shiftToPrev >> CycleWS.prevWS )
     ]
