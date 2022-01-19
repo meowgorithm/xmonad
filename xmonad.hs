@@ -125,6 +125,7 @@ myManageHook =
         , className =? "Slack" --> (doFloat <+> doShift (getWS 1))
         , className =? "Discord" --> (doFloat <+> doShift (getWS 1))
         , className =? "Firefox" --> doFloat
+        , className =? "Thunderbird" --> doFloat
         , className =? "Chromium" --> doFloat
         , className =? "Gthumb" --> doSideFloat SE
         , className =? "Galculator" --> doSideFloat C
