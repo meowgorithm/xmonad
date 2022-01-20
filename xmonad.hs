@@ -11,16 +11,16 @@ import XMonad
     , XConfig(XConfig, terminal, workspaces, normalBorderColor,
         focusedBorderColor, borderWidth, keys, modMask, manageHook), appName
     , className, composeAll, controlMask, doFloat, doShift, layoutHook, mod4Mask
-    , shiftMask, spawn, windows, xK_b, xK_bracketleft, xK_bracketright, xK_p
-    , xK_s, xK_z, xmonad )
+    , shiftMask, spawn, windows, xK_Return, xK_b, xK_bracketleft
+    , xK_bracketright, xK_p, xK_s, xK_z, xmonad )
 import qualified XMonad.Actions.CycleWS as CycleWS
 import XMonad.Actions.SpawnOn ( manageSpawn, spawnHere )
 import XMonad.Hooks.DynamicLog
     ( PP, ppCurrent, ppHidden, ppOrder, ppSep, ppTitle, statusBar, xmobar
     , xmobarColor, xmobarPP )
 import XMonad.Hooks.ManageDocks ( Direction1D(Next, Prev), manageDocks )
-import XMonad.Hooks.ManageHelpers
-    ( Side(SW, SE, C), doFullFloat, doSideFloat, isFullscreen )
+import XMonad.Hooks.ManageHelpers ( Side(SW, SE, C), doCenterFloat, doFullFloat
+                                  , doRectFloat, doSideFloat, isFullscreen )
 import XMonad.Layout.LayoutModifier ( ModifiedLayout )
 import XMonad.Layout.MultiColumns ( MultiCol, multiCol )
 import XMonad.Layout.Named ( named )
@@ -30,6 +30,7 @@ import XMonad.Layout.Tabbed as Tabbed ( simpleTabbed )
 import XMonad.Layout.ThreeColumns ( ThreeCol(ThreeColMid) )
 import XMonad.Layout.ToggleLayouts ( toggleLayouts )
 import qualified XMonad.StackSet as StackSet
+import XMonad.StackSet ( RationalRect(RationalRect) )
 import XMonad.Util.EZConfig ( additionalKeys )
 import XMonad.Util.NamedScratchpad ( namedScratchpadFilterOutWorkspace )
 import XMonad.Util.Run ( spawnPipe )
@@ -79,8 +80,11 @@ myWorkspaces =
 
 myKeys :: (XConfig Layout -> Map.Map (ButtonMask, KeySym) (X ()))
 myKeys conf@XConfig {XMonad.modMask = modMask} = Map.fromList
+    -- Floating Kitty (super + ctrl + enter)
+    [ ((mod4Mask .|. controlMask, xK_Return), spawn "kitty --single-instance --class=floating")
+
     -- Rofi (super + p)
-    [ ((mod4Mask, xK_p), spawn "rofi -show run")
+    , ((mod4Mask, xK_p), spawn "rofi -show run")
 
     -- Screenshots (super + shift + s)
     , ( (mod4Mask .|. shiftMask, xK_s)
@@ -130,6 +134,7 @@ myManageHook =
         , className =? "Gthumb" --> doSideFloat SE
         , className =? "Galculator" --> doSideFloat C
         , className =? "Gcolor2" --> doSideFloat C
+        , className =? "floating" --> doRectFloat (RationalRect (2/6) (2/6) (2/6) (2/6))
         ]
 
 
