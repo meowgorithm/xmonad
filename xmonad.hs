@@ -12,8 +12,9 @@ import XMonad
         focusedBorderColor, borderWidth, keys, modMask, manageHook), appName
     , className, composeAll, controlMask, doFloat, doShift, layoutHook, mod4Mask
     , shiftMask, spawn, windows, xK_Return, xK_b, xK_bracketleft
-    , xK_bracketright, xK_p, xK_s, xK_z, xmonad )
+    , xK_bracketright, xK_p, xK_s, xK_z, xmonad, xK_Tab, mod1Mask )
 import qualified XMonad.Actions.CycleWS as CycleWS
+import qualified XMonad.Actions.CycleWindows as CycleWindows
 import XMonad.Actions.SpawnOn ( manageSpawn, spawnHere )
 import XMonad.Hooks.DynamicLog
     ( PP, ppCurrent, ppHidden, ppOrder, ppSep, ppTitle, statusBar, xmobar
@@ -110,6 +111,10 @@ myKeys conf@XConfig {XMonad.modMask = modMask} = Map.fromList
     -- Move window to next/previous workspace (super + shift + [])
     , ( (modMask .|. shiftMask, xK_bracketright), CycleWS.shiftToNext >> CycleWS.nextWS )
     , ( (modMask .|. shiftMask, xK_bracketleft), CycleWS.shiftToPrev >> CycleWS.prevWS )
+
+    -- Cycle through floating windows (alt + tab/shift + alt + tab)
+    , ( (mod1Mask, xK_Tab), CycleWindows.rotFocusedUp )
+    , ( (mod1Mask .|. shiftMask, xK_Tab), CycleWindows.rotFocusedDown )
     ]
 
     where
