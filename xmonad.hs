@@ -10,23 +10,27 @@ import XMonad
     , WindowSet, X
     , XConfig(XConfig, terminal, workspaces, normalBorderColor,
         focusedBorderColor, borderWidth, keys, modMask, manageHook), appName
-    , className, composeAll, controlMask, doFloat, doShift, layoutHook, mod4Mask
-    , shiftMask, spawn, windows, xK_Return, xK_b, xK_bracketleft
-    , xK_bracketright, xK_p, xK_s, xK_z, xmonad, xK_Tab, mod1Mask )
+    , className, composeAll, controlMask, doFloat, doShift, layoutHook, mod1Mask
+    , mod4Mask, sendMessage, shiftMask, spawn, windows, xK_Return, xK_Tab, xK_b
+    , xK_bracketleft, xK_bracketright, xK_p, xK_s, xK_space, xK_z, xmonad )
 import qualified XMonad.Actions.CycleWS as CycleWS
 import qualified XMonad.Actions.CycleWindows as CycleWindows
 import XMonad.Actions.SpawnOn ( manageSpawn, spawnHere )
 import XMonad.Hooks.DynamicLog
     ( PP, ppCurrent, ppHidden, ppOrder, ppSep, ppTitle, statusBar, xmobar
     , xmobarColor, xmobarPP )
-import XMonad.Hooks.ManageDocks ( Direction1D(Next, Prev), manageDocks )
+import XMonad.Hooks.ManageDocks
+    ( Direction1D(Next, Prev), ToggleStruts(ToggleStruts), manageDocks )
 import XMonad.Hooks.ManageHelpers ( Side(SW, SE, C), doCenterFloat, doFullFloat
                                   , doRectFloat, doSideFloat, isFullscreen )
+import XMonad.Layout.Gaps ( GapMessage(ToggleGaps) )
 import XMonad.Layout.LayoutModifier ( ModifiedLayout )
 import XMonad.Layout.MultiColumns ( MultiCol, multiCol )
 import XMonad.Layout.Named ( named )
 import XMonad.Layout.NoBorders ( SmartBorder, noBorders, smartBorders )
-import XMonad.Layout.Spacing ( Border(Border), spacingRaw )
+import XMonad.Layout.Spacing
+    ( Border(Border), smartSpacing, spacingRaw, toggleScreenSpacingEnabled
+    , toggleScreenSpacingEnabled, toggleWindowSpacingEnabled )
 import XMonad.Layout.Tabbed as Tabbed ( simpleTabbed )
 import XMonad.Layout.ThreeColumns ( ThreeCol(ThreeColMid) )
 import XMonad.Layout.ToggleLayouts ( toggleLayouts )
@@ -64,7 +68,7 @@ myConfig =
         , workspaces = myWorkspaces
         , normalBorderColor = "#262626"
         , focusedBorderColor = "#44447f"
-        , borderWidth = 4
+        , borderWidth = 3
         , layoutHook = spacing myLayoutHook
         , manageHook = myManageHook
         , keys = \c -> myKeys c `Map.union` keys def c
@@ -115,6 +119,13 @@ myKeys conf@XConfig {XMonad.modMask = modMask} = Map.fromList
     -- Cycle through floating windows (alt + tab/shift + alt + tab)
     , ( (mod1Mask, xK_Tab), CycleWindows.rotFocusedUp )
     , ( (mod1Mask .|. shiftMask, xK_Tab), CycleWindows.rotFocusedDown )
+
+    -- Toggle gaps (super + ctrl + space)
+    , ((modMask .|. controlMask, xK_space), sequence_ [
+        toggleScreenSpacingEnabled
+      , toggleWindowSpacingEnabled
+      --, sendMessage ToggleStruts
+      ])
     ]
 
     where
