@@ -63,7 +63,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} =
 
 
 myConfig =
-    def { terminal = "kitty --single-instance"
+    def { terminal = "nixGL kitty --single-instance"
         , modMask = mod4Mask
         , workspaces = myWorkspaces
         , normalBorderColor = "#262626"
