@@ -1,3 +1,7 @@
+Archived: configuration moved to [dotfiles](https://github.com/meowgorithm/dotfiles).
+
+***
+
 XMonad: The Meowgorithm Collector’s Edition
 ===========================================
 
